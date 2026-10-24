@@ -1,0 +1,17 @@
+大肥鱼桌宠（Fishpet Android）
+Copyright 2026 <维护者>
+
+本项目基于以下第三方开源组件构建，均遵循 Apache License 2.0：
+
+  AndroidX Core KTX            androidx.core:core-ktx:1.13.1
+  AndroidX AppCompat           androidx.appcompat:appcompat:1.7.0
+  AndroidX Lifecycle Runtime   androidx.lifecycle:lifecycle-runtime-ktx:2.8.4
+  AndroidX Security Crypto     androidx.security:security-crypto:1.1.0-alpha06
+  OkHttp                       com.squareup.okhttp3:okhttp:4.12.0
+  Kotlin Coroutines            org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1
+  Kotlin Standard Library      org.jetbrains.kotlin:kotlin-stdlib
+  Android Gradle Plugin        com.android.tools.build:gradle:8.5.2
+  Gradle                       https://gradle.org
+
+各组件版权归其各自作者所有。
+对话能力依赖 DeepSeek 官方 API（https://api.deepseek.com），使用需自备 API Key。
