@@ -53,6 +53,26 @@ object PetPrefs {
     fun lastSeen(c: Context): Long = sp(c).getLong("last_seen", 0L)
     fun setLastSeen(c: Context, v: Long) = sp(c).edit().putLong("last_seen", v).apply()
 
+    // ---------------------------------------------------------------- 屏幕感知 / 应用感知 / 签到
+
+    /** 用户在主界面明确同意“读取屏幕文字并发送给 DeepSeek”。默认 false。 */
+    fun screenConsent(c: Context): Boolean = sp(c).getBoolean("screen_consent", false)
+    fun setScreenConsent(c: Context, v: Boolean) = sp(c).edit().putBoolean("screen_consent", v).apply()
+
+    /** 敏感应用（银行 / 支付 / 密码管理 / 系统设置）不读取。默认 true。 */
+    fun screenBlockSensitive(c: Context): Boolean = sp(c).getBoolean("screen_block_sensitive", true)
+    fun setScreenBlockSensitive(c: Context, v: Boolean) = sp(c).edit().putBoolean("screen_block_sensitive", v).apply()
+
+    /** 应用感知：只看前台 App 的包名，本地评论，不读内容、不联网。默认 false。 */
+    fun appReactions(c: Context): Boolean = sp(c).getBoolean("app_reactions", false)
+    fun setAppReactions(c: Context, v: Boolean) = sp(c).edit().putBoolean("app_reactions", v).apply()
+
+    /** 每日签到：上次签到日期（yyyyMMdd）和连续天数 */
+    fun lastCheckin(c: Context): Int = sp(c).getInt("last_checkin", 0)
+    fun setLastCheckin(c: Context, v: Int) = sp(c).edit().putInt("last_checkin", v).apply()
+    fun streak(c: Context): Int = sp(c).getInt("streak", 0)
+    fun setStreak(c: Context, v: Int) = sp(c).edit().putInt("streak", v).apply()
+
     // ---------------------------------------------------------------- 性格
 
     const val DEFAULT_PERSONA =

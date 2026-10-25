@@ -189,6 +189,46 @@ class MainActivity : AppCompatActivity() {
         }
         refreshMemories(memView)
 
+        label("⑤ 屏幕感知（无障碍）", 16f)
+        root.addView(TextView(this).apply {
+            text = "开启后，只有你主动点“看屏幕”（菜单里，或聊天里的“附带屏幕”）时，才会一次性读取当前界面的文字，" +
+                "并随这条消息发给 DeepSeek，用来回答你的问题。\n" +
+                "• 不会在后台持续读取，也不会把屏幕内容存进长期记忆\n" +
+                "• 不读密码框；默认不读银行 / 支付 / 密码管理器 / 系统设置\n" +
+                "• 只读文字，看不到图片和视频画面；不会点击或控制你的手机\n" +
+                "• 屏幕上别人的聊天内容、验证码等也会被一起发出去，敏感页面请不要点“看屏幕”"
+            textSize = 12f
+            setPadding(0, 0, 0, dp(6))
+        })
+        button("A. 开启无障碍服务") { startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)) }
+        button("开关是灰的？允许“受限制的设置”（Android 13+）") {
+            toast("在应用信息页：右上角 ⋮ → 允许受限制的设置，然后回去开无障碍")
+            startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName")))
+        }
+        button("B. 阅读说明并同意发送屏幕文字") {
+            android.app.AlertDialog.Builder(this)
+                .setTitle("确认开启屏幕感知")
+                .setMessage(
+                    "之后每次你主动点“看屏幕”，当前界面上的文字会发送到 DeepSeek 的服务器，" +
+                        "按它的隐私政策处理。屏幕上如果有别人的消息、账号、验证码，也会一起发出去。\n\n" +
+                        "你可以随时在这里撤销同意，或在系统设置里关闭无障碍服务。"
+                )
+                .setPositiveButton("同意") { _, _ -> PetPrefs.setScreenConsent(this, true); toast("已同意"); refresh() }
+                .setNegativeButton("取消", null)
+                .show()
+        }
+        button("撤销同意") { PetPrefs.setScreenConsent(this, false); toast("已撤销"); refresh() }
+        root.addView(CheckBox(this).apply {
+            text = "敏感应用不读取（强烈建议保持勾选）"
+            isChecked = PetPrefs.screenBlockSensitive(this@MainActivity)
+            setOnCheckedChangeListener { _, on -> PetPrefs.setScreenBlockSensitive(this@MainActivity, on) }
+        })
+        root.addView(CheckBox(this).apply {
+            text = "应用感知：打开视频 / 聊天 / 游戏类 App 时评论两句（只看 App 包名，不读内容、不联网）"
+            isChecked = PetPrefs.appReactions(this@MainActivity)
+            setOnCheckedChangeListener { _, on -> PetPrefs.setAppReactions(this@MainActivity, on) }
+        })
+
         setContentView(ScrollView(this).apply { addView(root) })
     }
 
@@ -203,6 +243,8 @@ class MainActivity : AppCompatActivity() {
             appendLine("${mark(notif)} 通知权限")
             appendLine("${mark(battery)} 已忽略电池优化")
             appendLine("${mark(SecureStore.hasApiKey(this@MainActivity))} 已保存 API Key")
+            appendLine("${mark(ScreenReaderService.isEnabled(this@MainActivity))} 无障碍服务已开启")
+            appendLine("${mark(PetPrefs.screenConsent(this@MainActivity))} 已同意读取屏幕文字")
             append("${mark(PetService.running)} 桌宠运行中")
         }
     }

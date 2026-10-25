@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">蓝色大肥鱼</string>
+    <string name="accessibility_description">大肥鱼桌宠需要这个权限，才能在你主动点“看屏幕”时读取当前界面上的文字，陪你聊屏幕上的内容，并（可选）识别你打开的 App 来互动。它不会在后台持续读取屏幕，不读取密码框，也不会点击或控制你的手机。</string>
 </resources>

@@ -58,6 +58,7 @@ class PetService : Service() {
         if (!Settings.canDrawOverlays(this)) { stopSelf(); return }
         controller = PetController(this, scope) { stopSelf() }.also { it.show() }
         running = true
+        ScreenReaderService.onForegroundApp = { pkg -> controller?.onForegroundApp(pkg) }
         startBalanceLoop()
     }
 
@@ -68,6 +69,7 @@ class PetService : Service() {
 
     override fun onDestroy() {
         running = false
+        ScreenReaderService.onForegroundApp = null
         controller?.destroy()
         scope.cancel()
         super.onDestroy()
